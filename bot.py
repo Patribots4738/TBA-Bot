@@ -89,6 +89,20 @@ async def robot(ctx, team_number):
             message += f"{robot['robot_name']} in {robot['year']}\n"
         await ctx.send(message)
 
+#get team's media using tba.team_media(team_number, year)
+@client.command()
+async def media(ctx, team_number, year):
+    team_number = int(team_number)
+    year = int(year)
+    media = tba.team_media(team_number, year)
+    message = ""
+    if len(media) == 0:
+        await ctx.send(f'Team {team_number} does not have any media from {year}')
+    else:
+        message += (f'Team {team_number} has the following media from {year}:\n')
+        for media in media:
+            message += f"{media['type']} - {media['foreign_key']}\n"
+        await ctx.send(message)
 
 
 
