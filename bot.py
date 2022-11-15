@@ -95,13 +95,18 @@ async def media(ctx, team_number, year):
     team_number = int(team_number)
     year = int(year)
     media = tba.team_media(team_number, year)
+    print(media)
     message = ""
     if len(media) == 0:
         await ctx.send(f'Team {team_number} does not have any media from {year}')
     else:
         message += (f'Team {team_number} has the following media from {year}:\n')
         for media in media:
-            message += f"{media['type']} - {media['foreign_key']}\n"
+            #print media as an embed with the title as the media type and the description as the media direct link
+            embed = discord.Embed(title=media['type'], description=media['direct_url'])
+            await ctx.send(embed=embed)
+            #
+            # message += f"{media['type']} - {media['direct_url']}\n"
         await ctx.send(message)
 
 
