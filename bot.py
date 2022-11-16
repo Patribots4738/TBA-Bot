@@ -31,7 +31,7 @@ It deletes the command message and then deletes the amount of messages specified
 
 
 @client.command()
-async def clear(ctx, amount=2):
+async def clear(ctx, amount=1):
     if amount == -00:
         await ctx.channel.purge()
     else:
