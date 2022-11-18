@@ -99,6 +99,21 @@ class Commands(commands.Cog):
             await ctx.send(message)
 
     @commands.command()
+    async def robot(self, ctx, team_number):
+        team_number = int(team_number)
+        robot = tba.team_robots(team_number)
+        print(robot)
+        # loop through the list of robots and print out the name and year
+        message = ""
+        if len(robot) == 0:
+            await ctx.send(f'Team {team_number} does not have any robots')
+        else:
+            message += (f'Team {team_number} has the following robots:\n')
+            for robot in robot:
+                message += f"{robot['robot_name']} in {robot['year']}\n"
+            await ctx.send(message)
+
+    @commands.command()
     async def media(self, ctx, team_number, year):
         team_number = int(team_number)
         year = int(year)
