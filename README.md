@@ -9,13 +9,12 @@ TBA bot that contains different commands for the user to use to check on their f
 
 ### Command List
 * `clear <amount>` - Clears the chat by 1 unless otherwise specified by `amount`.
-* `last <team number> <year>` - Shows the last match of the team in the specified year
+* `event <team number> <year>` - Shows the last event of the team in the specified year
 * `award <team number> <year>` - Shows the awards of the team in the specified year
 * `robot <team number>` - Shows all robots of the team
-* 
+* `alliances <event code>` - Shows all alliances of the event given the `event code`
 ### Commands in Development
 * `media <team number> <year>` - Shows all media of the team in the specified year
-* `alliances <event code>` - Shows all alliances of the event given the `event code`
 ### Commands in Planning
 * matches at event 
 * years active

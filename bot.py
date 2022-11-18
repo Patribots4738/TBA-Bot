@@ -40,7 +40,7 @@ async def clear(ctx, amount=1):
 
 
 @client.command(help='testing help command')
-async def last(ctx, team_number, year):
+async def event(ctx, team_number, year):
     team_number = int(team_number)
     year = int(year)
 
@@ -89,7 +89,7 @@ async def awards(ctx, team_number, year):
 
 # get a robot's stats using tba.team_robots(team_number)
 @client.command()
-async def robot(ctx, team_number):
+async def robots(ctx, team_number):
     team_number = int(team_number)
     robot = tba.team_robots(team_number)
 
@@ -139,31 +139,36 @@ async def media(ctx, team_number, year):
 
 # default command
 @client.command()
-async def alliance(ctx):
-    alliances = tba.event_alliances('2022cabl')
-    message = ""
-    if len(alliances) == 0:
-        print_message('error', 'tba.event_alliances', f'No alliances found for event 2022cabl')
+async def alliance(ctx, event_key):
+    # if the event key throws an error (not a valid event key) then send an error message to the channel
+    try:
+        alliances = tba.event_alliances(event_key)
+        message = ""
+        if len(alliances) == 0:
+            print_message('error', 'tba.event_alliances', f'No alliances found for event 2022cabl')
 
-        await ctx.send(f'No alliances found for event 2022cabl')
+            await ctx.send(f'No alliances found for event 2022cabl')
 
-    else:
-        # loop through alliances and get the teams, the first team is the captain and the rest are the picks
-        # the captain is bolded
-        # the picks are sent in an unordered list
-        for alliance in alliances:
-            message += f"**{alliance['picks'][0]}**\n"
-            for pick in alliance['picks'][1:]:
-                # if the pick is the last pick in the list add an italicized tag around it
-                if pick == alliance['picks'][-1]:
-                    message += f"*{pick}*\n"
-                else:
-                    message += f"\t{pick}\n"
-            message += "\n"
-        print_message('info', 'tba.event_alliances', f'Successfully sent alliance data to channel')
+        else:
+            # loop through alliances and get the teams, the first team is the captain and the rest are the picks
+            # the captain is bolded
+            # the picks are sent in an unordered list
+            for alliance in alliances:
+                message += f"**{alliance['picks'][0]}**\n"
+                for pick in alliance['picks'][1:]:
+                    # if the pick is the last pick in the list add an italicized tag around it
+                    if pick == alliance['picks'][-1]:
+                        message += f"*{pick}*\n"
+                    else:
+                        message += f"\t{pick}\n"
+                message += "\n"
+            print_message('info', 'tba.event_alliances', f'Successfully sent alliance data to channel')
 
+        await ctx.send(message)
+    except:
+        print_message('error', 'tba.event_alliances', f'No alliances found for event {event_key}')
 
-    await ctx.send(message)
+        await ctx.send(f'No alliances found for event {event_key}')
 
 
 '''
