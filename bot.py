@@ -115,26 +115,55 @@ async def robot(ctx, team_number):
 async def media(ctx, team_number, year):
     team_number = int(team_number)
     year = int(year)
-
-    medias = tba.team_media(team_number, year)
-
-    message = ""
-    if len(medias) == 0:
+    # get team's media
+    media = tba.team_media(team_number, year)
+    # if there is no media
+    if len(media) == 0:
         print_message('error', 'tba.team_media', f'No media found for team {team_number} in year {year}')
+        await ctx.send(f'Team {team_number} has no media in {year}')
+    # if there is media
+    else:
+        print(media)
+        message = ""
+        message += (f'Team {team_number} has the following media in {year}:\n')
+        # loop through media
+        for media in media:
+            # if media is a youtube video
+            if media['type'] == 'youtube':
+                message += f"{media['type']} - {media['view_url']}\n"
+            else:
+                message += f"{media['type']} - {media['direct_url']}\n"
+        print_message('info', 'tba.team_media', f'Successfully sent {team_number} media in year {year} to channel')
+        await ctx.send(message)
 
-        await ctx.send(f'Team {team_number} does not have any media from {year}')
+
+# default command
+@client.command()
+async def alliance(ctx):
+    alliances = tba.event_alliances('2022cabl')
+    message = ""
+    if len(alliances) == 0:
+        print_message('error', 'tba.event_alliances', f'No alliances found for event 2022cabl')
+
+        await ctx.send(f'No alliances found for event 2022cabl')
 
     else:
-        message += f'Team {team_number} has the following media from {year}:\n'
+        # loop through alliances and get the teams, the first team is the captain and the rest are the picks
+        # the captain is bolded
+        # the picks are sent in an unordered list
+        for alliance in alliances:
+            message += f"**{alliance['picks'][0]}**\n"
+            for pick in alliance['picks'][1:]:
+                # if the pick is the last pick in the list add an italicized tag around it
+                if pick == alliance['picks'][-1]:
+                    message += f"*{pick}*\n"
+                else:
+                    message += f"\t{pick}\n"
+            message += "\n"
+        print_message('info', 'tba.event_alliances', f'Successfully sent alliance data to channel')
 
-        for media in medias:
-            embed = discord.Embed(title=media['type'], description=media['direct_url'])
 
-            await ctx.send(embed=embed)
-
-        print_message('info', 'tba.team_media', f'Successfully sent {team_number} media from {year} to channel')
-
-        await ctx.send(message)
+    await ctx.send(message)
 
 
 '''

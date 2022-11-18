@@ -15,7 +15,7 @@ TBA bot that contains different commands for the user to use to check on their f
 * 
 ### Commands in Development
 * `media <team number> <year>` - Shows all media of the team in the specified year
-
+* `alliances <event code>` - Shows all alliances of the event given the `event code`
 ### Commands in Planning
 * matches at event 
 * years active
